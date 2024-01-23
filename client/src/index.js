@@ -9,12 +9,12 @@ import { AuthContextProvider } from "./context/authContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <AuthContextProvider>
-      <ChakraProvider>
+    <ChakraProvider>
+      <AuthContextProvider>
         <BrowserRouter>
           <App />
         </BrowserRouter>
-      </ChakraProvider>
-    </AuthContextProvider>
+      </AuthContextProvider>
+    </ChakraProvider>
   </React.StrictMode>
 );
