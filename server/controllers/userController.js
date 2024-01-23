@@ -87,20 +87,17 @@ const logoutUser = (req, res) => {
 };
 
 const isLogin = async (req, res) => {
-  const user = req.user;
-  if (user) {
-    return res.status(200).json({
-      success: true,
-      auth: true,
-      user: {
-        username: user.username,
-        email: user.email,
-        userId: user._id,
-      },
-    });
-  }else{
-    return res.status(400);
-  }
+  const user = req.body.user;
+  res.status(200).json({
+    success: true,
+    auth: true,
+    user: {
+      name: user.name,
+      email: user.email,
+      companyName: user.companyName,
+      userId: user._id,
+    },
+  });
 };
 
 module.exports = { allUsers, registerUser, loginUser, logoutUser, isLogin };
