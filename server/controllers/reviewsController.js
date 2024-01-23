@@ -34,8 +34,12 @@ const getAllReviewToPR = async (req, res) => {
       "approvers.approverId",
       "username email"
     );
-
-    // approvers = approvers.filter((ap) => ap.approverId._id != userId);
+    if(approvers===null || approvers===undefined){
+      throw new Error("Invalid PR Id");
+    }
+    approvers = approvers.filter((ap) => {
+      return JSON.stringify(ap.approverId._id)!==JSON.stringify(userId);
+    });
     return res.status(200).json({ success: true, userId, approvers });
   } catch (e) {
     console.log(e);

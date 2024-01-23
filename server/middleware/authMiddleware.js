@@ -20,24 +20,27 @@ exports.authMiddle = async (req, res, next) => {
 exports.authorizeRoles = (...roles) => {
   return async (req, res, next) => {
     let user = req.user;
-    user = await user.populate("roles");
-
-    // let isAdmin = function (obj) {
-    //   return obj.roleName === "admin";
-    // };
-    userRoles = [];
-    user.roles.forEach((role) => {
-      userRoles.push(role.roleName);
-    });
-    let isValid = false;
-    user.roles.forEach((role) => {
-      isValid= isValid || roles.includes(role.roleName);
-    });
-    if (!isValid) {
-      throw new Error(
-        `Role: + ${req.user.role} + is not allowed to access this resource`
-      );
-    }
-    next();
+      try{
+        user = await user.populate("roles");
+        userRoles = [];
+        user.roles.forEach((role) => {
+          userRoles.push(role.roleName);
+        });
+        if(userRoles.length===0 || userRoles===undefined){
+          throw new Error("No Roles Specified");
+        }
+        let isValid = false;
+        user.roles.forEach((role) => {
+          isValid= isValid || roles.includes(role.roleName);
+        });
+        if (!isValid) {
+          throw new Error(
+            `Role: + ${req.user.role} + is not allowed to access this resource`
+          );
+        }
+      next();
+      }catch(err){
+        return res.status(401).json({ msg: e.message });
+      }
   };
 };

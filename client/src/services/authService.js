@@ -39,7 +39,7 @@ class AuthService {
       let data = response.data;
       return data;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return;
     }
   }

@@ -7,11 +7,9 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
-  FormControl,
   Input,
   useToast,
   Box,
-  Textarea,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import UserBadgeItem from "../components/userAvatar/UserBadgeItem";
@@ -77,7 +75,6 @@ const CreatePRModal = ({ open, handleClose }) => {
       approvers.push({ approverId: s._id });
     });
 
-    // console.log(approvers);
     const data = await PRService.createPR(title, description, approvers);
     if (data.success) {
       toast({
@@ -88,6 +85,7 @@ const CreatePRModal = ({ open, handleClose }) => {
         position: "top",
       });
       handleClose();
+      window.location.reload(false);
     } else {
       toast({
         title: data.msg,
@@ -99,7 +97,6 @@ const CreatePRModal = ({ open, handleClose }) => {
       return;
     }
   };
-
   return (
     <>
       <Modal isOpen={open} onClose={handleClose} isCentered>
@@ -110,29 +107,23 @@ const CreatePRModal = ({ open, handleClose }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody display="flex" flexDir="column" alignItems="center">
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="Enter Title"
-                mb={3}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <Textarea
-                type="text"
-                placeholder="Enter Description"
-                mb={3}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <Input
-                placeholder="Add Approvers by Username/Email"
-                mb={1}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-            </FormControl>
+            <Input
+              type="text"
+              placeholder="Enter Title"
+              mb={3}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Input
+              type="text"
+              placeholder="Enter Description"
+              mb={3}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <Input
+              placeholder="Add Approvers by Username/Email"
+              mb={1}
+              onChange={(e) => handleSearch(e.target.value)}
+            />
             <Box w="100%" display="flex" flexWrap="wrap">
               {selectedApprovers.map((u) => (
                 <UserBadgeItem
@@ -157,7 +148,7 @@ const CreatePRModal = ({ open, handleClose }) => {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit}>
+            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
               Create Pull Request
             </Button>
           </ModalFooter>

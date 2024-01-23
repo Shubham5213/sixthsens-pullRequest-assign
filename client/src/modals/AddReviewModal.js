@@ -34,7 +34,6 @@ const AddReviewModal = ({ open, handleClose, approvalId }) => {
     <>
       <Modal isOpen={open} onClose={handleClose} isCentered>
         <ModalOverlay />
-
         <ModalContent>
           <ModalHeader display="flex" justifyContent="center">
             Add Review :

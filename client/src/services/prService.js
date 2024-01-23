@@ -70,6 +70,7 @@ class PRService {
       console.log(error);
     }
   }
+
   static async createPR(title, description, approvers) {
     let url = `${apiUrl}/pull-requests`;
     const body = {
@@ -79,6 +80,23 @@ class PRService {
     };
     try {
       const response = await axios.post(url, body, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+      let data = response.data;
+      return data;
+    } catch (error) {
+      // console.log(error);
+      return;
+    }
+  }
+  static async getPRReviews(pullRequestId) {
+    let url = `${apiUrl}/user/pull-requests/${pullRequestId}/reviews`;
+
+    try {
+      const response = await axios.get(url, {
         headers: {
           "Content-Type": "application/json",
         },

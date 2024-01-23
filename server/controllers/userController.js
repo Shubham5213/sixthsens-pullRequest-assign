@@ -17,7 +17,8 @@ const allUsers = async (req, res) => {
     const users = await User.find(keyword)
       .find({
         _id: { $ne: req.user._id },
-      }).select("username email");
+      })
+      .select("username email");
     return res.status(200).json({ success: true, users });
   } catch (err) {
     console.log(err);
@@ -53,9 +54,12 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { email, username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    let user = await User.findOne({ $or: [{ username }, { email }] });
+    if (!email || !password) {
+      throw new Error("Please Enter all the Fields");
+    }
+    let user = await User.findOne({ email });
     if (!user) {
       throw new Error("Invalid email or password");
     }
@@ -68,7 +72,7 @@ const loginUser = async (req, res) => {
       throw new Error("Invalid Email or Password");
     }
   } catch (err) {
-    return res.send({ success: false, msg: err.message });
+    return res.json({ success: false, msg: err.message });
   }
 };
 
@@ -84,15 +88,19 @@ const logoutUser = (req, res) => {
 
 const isLogin = async (req, res) => {
   const user = req.user;
-  res.status(200).json({
-    success: true,
-    auth: true,
-    user: {
-      username: user.username,
-      email: user.email,
-      userId: user._id,
-    },
-  });
+  if (user) {
+    return res.status(200).json({
+      success: true,
+      auth: true,
+      user: {
+        username: user.username,
+        email: user.email,
+        userId: user._id,
+      },
+    });
+  }else{
+    return res.status(400);
+  }
 };
 
 module.exports = { allUsers, registerUser, loginUser, logoutUser, isLogin };

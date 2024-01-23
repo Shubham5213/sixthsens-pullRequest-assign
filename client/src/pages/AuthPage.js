@@ -31,15 +31,15 @@ function AuthPage() {
       <Box bg="#FAF6F0" w="100%" p={4} borderRadius="lg" borderWidth="1px">
         <Tabs isFitted variant="soft-rounded">
           <TabList mb="1em">
-            <Tab>Login</Tab>
             <Tab>Sign Up</Tab>
+            <Tab>Login</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Login />
+              <Signup />
             </TabPanel>
             <TabPanel>
-              <Signup />
+              <Login />
             </TabPanel>
           </TabPanels>
         </Tabs>

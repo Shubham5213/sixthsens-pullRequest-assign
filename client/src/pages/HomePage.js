@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Heading } from "@chakra-ui/react";
 import AuthContext from "../context/authContext";
 import CreatePRModal from "../modals/CreatePRModal";
 
@@ -15,11 +15,12 @@ const HomePage = () => {
   };
 
   return (
-    <Box p={2}>
+    <Box p={2} mx="auto">
       <CreatePRModal
         open={open}
         handleClose={handleClose}
       />
+      <Heading align="center">WELCOME!</Heading>
       <Button
         colorScheme="blue"
         width="100%"

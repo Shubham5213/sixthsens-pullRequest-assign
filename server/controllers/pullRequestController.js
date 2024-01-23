@@ -33,7 +33,7 @@ const createPR = async (req, res) => {
       .status(200)
       .json({ success: true, pullRequest: PR });
   } catch (err) {
-    return res.json({ success: false, msg: err.message });
+    return res.status(400).json({ success: false, msg: err.message });
   }
 };
 
@@ -58,7 +58,7 @@ const getSpecificPR = async (req, res) => {
       return res.status(200).json({ success: true, PR });
     } else throw new Error("Invaid ID");
   } catch (err) {
-    res.json({ success: false, msg: err.message });
+    return res.json({ success: false, msg: err.message });
   }
 };
 
@@ -101,9 +101,6 @@ const deletePR = async (req, res) => {
 const getUserCreatedPR = async (req, res) => {
   const userId = req.user._id;
   try {
-    if (!userId) {
-      throw new Error("Login First");
-    }
     let userPR = await PullRequest.find({ requesterId: userId }).populate("approvers.approverId", "username email");
     if (userPR) {
       return res.status(200).json({ success: true, userPR });
