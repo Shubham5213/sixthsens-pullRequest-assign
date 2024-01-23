@@ -12,6 +12,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import UserBadgeItem from "../components/userAvatar/UserBadgeItem";
 import UserListItem from "../components/userAvatar/UserListItem";
 import PRService from "../services/prService";
@@ -24,6 +25,7 @@ const CreatePRModal = ({ open, handleClose }) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const handleApprovers = (approversToAdd) => {
     if (selectedApprovers.includes(approversToAdd)) {
@@ -86,6 +88,7 @@ const CreatePRModal = ({ open, handleClose }) => {
       });
       handleClose();
       window.location.reload(false);
+      navigate("/my-prs");
     } else {
       toast({
         title: data.msg,

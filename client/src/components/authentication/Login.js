@@ -31,7 +31,7 @@ const Login = () => {
     }
 
     const data = await AuthService.postLogin(email, password);
-    if (data.success) {
+    if (data!==null && data.success) {
       const user = data.user;
       authContext.login();
       authContext.updateUser({

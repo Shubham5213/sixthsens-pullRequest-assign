@@ -53,31 +53,35 @@ const Signup = () => {
 
     // setLoading(true);
     const data = await AuthService.postSignup(username, email, password);
-    if (data.success) {
-      const user = data.user;
-      authContext.login();
-      authContext.updateUser({
-        name: user.name,
-        email: user.email,
-        userId: user.userId,
-      });
-      toast({
-        title: "Registered Successfully",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      navigate("/home");
-    } else {
-      toast({
-        title: data.msg,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "bottom",
-      });
-      return;
+
+    if (data) {
+      if (data.success) {
+        const user = data.user;
+        authContext.login();
+        authContext.updateUser({
+          name: user.name,
+          email: user.email,
+          userId: user.userId,
+        });
+
+        toast({
+          title: "Registered Successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        navigate("/home");
+      } else {
+        toast({
+          title: data.msg,
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+        return;
+      }
     }
   };
 

@@ -87,14 +87,13 @@ const logoutUser = (req, res) => {
 };
 
 const isLogin = async (req, res) => {
-  const user = req.body.user;
+  const user = req.user;
   res.status(200).json({
     success: true,
     auth: true,
     user: {
-      name: user.name,
+      name: user.username,
       email: user.email,
-      companyName: user.companyName,
       userId: user._id,
     },
   });

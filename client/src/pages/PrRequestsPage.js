@@ -4,10 +4,10 @@ import PRService from "../services/prService.js";
 import ApprovalPR from "../components/ApprovalPR.js";
 
 const PrRequestsPage = () => {
-  const [prRequests, setprRequests] = useState();
+  const [prRequests, setprRequests] = useState([]);
   const getMyPrs = async () => {
     const data = await PRService.getUserPRApprovalRequests();
-    if (data.success) {
+    if (data && data.success) {
       // console.log(data.approvals);
       setprRequests(data.approvals);
     }
@@ -19,7 +19,7 @@ const PrRequestsPage = () => {
   return (
     <Box width="100%">
       <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-        {prRequests !== undefined ? (
+        {prRequests.length !== 0 ? (
           prRequests.map((pr) => {
             return <ApprovalPR key={pr._id} approvalPR={pr} />;
           })

@@ -40,7 +40,7 @@ exports.authorizeRoles = (...roles) => {
         }
       next();
       }catch(err){
-        return res.status(401).json({ msg: e.message });
+        return res.status(401).json({ msg: err.message });
       }
   };
 };

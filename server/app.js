@@ -10,16 +10,17 @@ dotenv.config();
 connectDB();
 const app = express();
 
+
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
 app.use(
   cors({
-    origin: ["https://pr-client-git-main-shubham5213.vercel.app"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
+
+app.use(express.json());
 
 app.use("/user", userRoutes);
 app.use("/pull-requests", pullRequestRoutes);
