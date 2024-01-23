@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://pr-client-git-main-shubham5213.vercel.app"],
     credentials: true,
   })
 );
