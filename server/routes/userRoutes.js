@@ -20,13 +20,14 @@ const { authMiddle, authorizeRoles } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
+// auth routes
 router.get("/islogin", authMiddle, isLogin);
 router.post("/", registerUser);
 router.get("/search", authMiddle, allUsers);
 router.post("/login", loginUser);
 router.get("/logout", logoutUser);
 
-// get User PR approval requests
+// get User PR approval requests authorised by Admin Only
 router.get(
   "/pull-requests",
   authMiddle,
