@@ -14,9 +14,6 @@ class UserService {
 
       if (res.data.success) {
         return res.data;
-      } else {
-        console.log(res.data.msg);
-        return false;
       }
     } catch (error) {
       if (error.status === 401) {

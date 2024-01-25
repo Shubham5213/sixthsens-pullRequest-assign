@@ -5,11 +5,14 @@ import UserPR from "../components/UserPR.js";
 
 const MyPRsPage = () => {
   const [myPR, setMyPR] = useState([]);
+  const [loading, setLoading] = useState(false);
   const getMyPrs = async () => {
+    setLoading(true);
     const data = await PRService.getUserPR();
     if (data.success) {
       // console.log(data.userPR);
       setMyPR(data.userPR);
+      setLoading(false);
     }
   };
 
@@ -25,8 +28,8 @@ const MyPRsPage = () => {
             return <UserPR key={pr._id} PR={pr} />;
           })
         ) : (
-          <Heading mx={"auto"} mt={5}>
-            No PR Generated Yet
+          <Heading mx={"auto"} mt={5} w={"full"}>
+            {loading ? "Loading..." : "No PullRequest Generated Yet"}
           </Heading>
         )}
       </Grid>

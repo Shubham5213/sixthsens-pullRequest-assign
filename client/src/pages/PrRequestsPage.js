@@ -5,11 +5,14 @@ import ApprovalPR from "../components/ApprovalPR.js";
 
 const PrRequestsPage = () => {
   const [prRequests, setprRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
   const getMyPrs = async () => {
+    setLoading(true);
     const data = await PRService.getUserPRApprovalRequests();
     if (data && data.success) {
       // console.log(data.approvals);
       setprRequests(data.approvals);
+      setLoading(false);
     }
   };
 
@@ -25,7 +28,7 @@ const PrRequestsPage = () => {
           })
         ) : (
           <Heading mx={"auto"} mt={5}>
-            No PR Requests Yet
+            {loading ? "Loading..." : "No PR Requests Yet"}
           </Heading>
         )}
       </Grid>
