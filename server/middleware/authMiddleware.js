@@ -3,7 +3,7 @@ const User = require("../models/userModel");
 
 exports.authMiddle = async (req, res, next) => {
   try {
-    console.log(req.cookies);
+    // console.log(req.cookies);
     const { token } = req.cookies;
 
     if (!token) {
