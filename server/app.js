@@ -10,16 +10,18 @@ dotenv.config();
 connectDB();
 const app = express();
 
-
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://pr-client-shubham5213.vercel.app",
+    ],
     credentials: true,
   })
 );
- 
+
 app.use(express.json());
 
 app.use("/user", userRoutes);
