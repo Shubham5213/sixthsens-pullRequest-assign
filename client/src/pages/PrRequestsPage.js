@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Heading, Box, Grid } from "@chakra-ui/react";
+import { Heading, Box, Grid, Text } from "@chakra-ui/react";
+import { ArrowBackIcon } from "@chakra-ui/icons";
+import { Link } from "react-router-dom";
 import PRService from "../services/prService.js";
 import ApprovalPR from "../components/ApprovalPR.js";
 
@@ -21,6 +23,12 @@ const PrRequestsPage = () => {
   }, []);
   return (
     <Box width="100%">
+      <Text color="blue" mx={4} py={2} as="u">
+        <Link to="/home">
+          <ArrowBackIcon mb={1} mx={0.5} />
+          Go Back
+        </Link>
+      </Text>
       <Grid templateColumns="repeat(4, 1fr)" gap={6}>
         {prRequests.length !== 0 ? (
           prRequests.map((pr) => {
