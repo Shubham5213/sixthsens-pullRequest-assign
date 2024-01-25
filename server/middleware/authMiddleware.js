@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 
 exports.authMiddle = async (req, res, next) => {
   try {
+    console.log(req.cookies);
     const { token } = req.cookies;
 
     if (!token) {
@@ -13,34 +14,34 @@ exports.authMiddle = async (req, res, next) => {
     req.user = await User.findById(decodedData.id);
     next();
   } catch (e) {
-    return res.status(401).json({ msg: e.message });
+    return res.status(401).json({ success: false, msg: e.message });
   }
 };
 
 exports.authorizeRoles = (...roles) => {
   return async (req, res, next) => {
     let user = req.user;
-      try{
-        user = await user.populate("roles");
-        userRoles = [];
-        user.roles.forEach((role) => {
-          userRoles.push(role.roleName);
-        });
-        if(userRoles.length===0 || userRoles===undefined){
-          throw new Error("No Roles Specified");
-        }
-        let isValid = false;
-        user.roles.forEach((role) => {
-          isValid= isValid || roles.includes(role.roleName);
-        });
-        if (!isValid) {
-          throw new Error(
-            `Role: + ${req.user.role} + is not allowed to access this resource`
-          );
-        }
-      next();
-      }catch(err){
-        return res.status(401).json({ msg: err.message });
+    try {
+      user = await user.populate("roles");
+      userRoles = [];
+      user.roles.forEach((role) => {
+        userRoles.push(role.roleName);
+      });
+      if (userRoles.length === 0 || userRoles === undefined) {
+        throw new Error("No Roles Specified");
       }
+      let isValid = false;
+      user.roles.forEach((role) => {
+        isValid = isValid || roles.includes(role.roleName);
+      });
+      if (!isValid) {
+        throw new Error(
+          `Role: + ${req.user.role} + is not allowed to access this resource`
+        );
+      }
+      next();
+    } catch (err) {
+      return res.status(401).json({ success: false, msg: err.message });
+    }
   };
 };
