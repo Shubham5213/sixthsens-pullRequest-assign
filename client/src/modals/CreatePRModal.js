@@ -78,16 +78,16 @@ const CreatePRModal = ({ open, handleClose }) => {
     });
 
     const data = await PRService.createPR(title, description, approvers);
+
     if (data.success) {
+      handleClose();
       toast({
-        title: data.msg,
-        status: "Success",
+        title: "PullRequest Created Successfully",
+        status: "success",
         duration: 5000,
         isClosable: true,
         position: "top",
       });
-      handleClose();
-      window.location.reload(false);
       navigate("/my-prs");
     } else {
       toast({

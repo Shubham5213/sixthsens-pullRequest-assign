@@ -10,6 +10,7 @@ const UserPR = ({ PR }) => {
         p={4}
         rounded={6}
         alignContent={"stretch"}
+        h="100%"
       >
         <Box>Title: {PR.title}</Box>
         <Text>Description: {PR.description}</Text>
