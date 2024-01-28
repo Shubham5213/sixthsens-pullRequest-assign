@@ -1,8 +1,8 @@
-import React, { useState, useReducer, useEffect } from "react";
+import React, { useState, useReducer, useEffect, createContext } from "react";
 import AuthService from "../services/authService";
 import UserService from "../services/userService";
 
-const AuthContext = React.createContext({
+const AuthContext = createContext({
   login: () => {},
   logout: () => {},
   updateUser: () => {},
@@ -24,7 +24,7 @@ export const AuthContextProvider = (props) => {
   const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [user, dispatchUser] = useReducer(userReducer, {
-    name: "",
+    username: "",
     email: "",
     userId: "",
   });
@@ -49,7 +49,7 @@ export const AuthContextProvider = (props) => {
       if (data.auth) {
         setLogin(true);
         dispatchUser({
-          name: data.user.name,
+          username: data.user.username,
           email: data.user.email,
           userId: data.user.userId,
         });
@@ -63,7 +63,7 @@ export const AuthContextProvider = (props) => {
 
   const contextValue = {
     isLoggedIn: login,
-    name: user.name,
+    username: user.username,
     email: user.email,
     userId: user.userId,
     login: loginHandler,

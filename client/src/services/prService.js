@@ -34,8 +34,8 @@ class PRService {
     }
   }
 
-  static async updatePRApprovalStatus(approvelId, status) {
-    let url = `${apiUrl}/user/pull-requests/${approvelId}`;
+  static async updatePRApprovalStatus(prId, status) {
+    let url = `${apiUrl}/user/pull-requests/${prId}`;
     const body = {
       status: status,
     };

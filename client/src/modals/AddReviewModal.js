@@ -13,12 +13,12 @@ import {
 } from "@chakra-ui/react";
 import PRService from "../services/prService";
 
-const AddReviewModal = ({ open, handleClose, approvalId }) => {
+const AddReviewModal = ({ open, handleClose, prId }) => {
   const [review, setReview] = useState("");
   const toast = useToast();
 
   const handleSubmit = async () => {
-    const data = await PRService.addReviewToPR(approvalId, review);
+    const data = await PRService.addReviewToPR(prId, review);
     if (data.success) {
       toast({
         title: "Review Added Successfully",

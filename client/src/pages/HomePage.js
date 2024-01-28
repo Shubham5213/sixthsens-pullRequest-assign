@@ -14,13 +14,11 @@ const HomePage = () => {
     setOpen(false);
   };
 
+
   return (
     <Box p={2} mx="auto">
-      <CreatePRModal
-        open={open}
-        handleClose={handleClose}
-      />
-      <Heading align="center">WELCOME!</Heading>
+      <CreatePRModal open={open} handleClose={handleClose} />
+      <Heading align="center">WELCOME{" "}{authContext.username}!</Heading>
       <Button
         colorScheme="blue"
         width="100%"

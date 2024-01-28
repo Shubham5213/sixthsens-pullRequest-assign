@@ -16,6 +16,7 @@ const pullRequestSchema = new mongoose.Schema(
         // reviews: { type: mongoose.Schema.Types.ObjectId, ref: "Review" },
         reviews: { type: String },
       },
+      // ],
     ],
   },
   { timestamps: true }

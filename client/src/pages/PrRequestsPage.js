@@ -11,6 +11,7 @@ const PrRequestsPage = () => {
   const getMyPrs = async () => {
     setLoading(true);
     const data = await PRService.getUserPRApprovalRequests();
+    // console.log();
     if (data && data.success) {
       // console.log(data.approvals);
       setprRequests(data.approvals);

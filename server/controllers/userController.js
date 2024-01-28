@@ -96,7 +96,7 @@ const isLogin = async (req, res) => {
       success: true,
       auth: true,
       user: {
-        name: user.username,
+        username: user.username,
         email: user.email,
         userId: user._id,
       },

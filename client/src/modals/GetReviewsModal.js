@@ -17,6 +17,7 @@ const GetReviewsModal = ({ open, handleClose, pullRequestId }) => {
   const getReviews = async () => {
     const data = await PRService.getPRReviews(pullRequestId);
     if (data.success) {
+      // console.log(data);  
       setReviews(data.approvers);
       // toast({
       //   title: "Successfully fetched",
@@ -44,14 +45,20 @@ const GetReviewsModal = ({ open, handleClose, pullRequestId }) => {
             <VStack>
               {reviews?.map((review) => {
                 return (
-                  <Box key={review._id} bgColor="#092635" color="white" p={4} rounded={4}>
+                  <Box
+                    key={review._id}
+                    bgColor="#092635"
+                    color="white"
+                    p={4}
+                    rounded={4}
+                  >
                     <Box>Username: {review.approverId.username}</Box>
                     <Box>Email: {review.approverId.email}</Box>
                     <Box>Status: {review.status}</Box>
                     <Box>
                       Reviews:{" "}
-                      {reviews.reviews !== undefined
-                        ? reviews.reviews
+                      {review.reviews !== undefined
+                        ? review.reviews
                         : "No Reviews Yet"}
                     </Box>
                   </Box>

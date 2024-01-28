@@ -35,7 +35,7 @@ const Login = () => {
       const user = data.user;
       authContext.login();
       authContext.updateUser({
-        name: user.name,
+        username: user.username,
         email: user.email,
         userId: user.userId,
       });

@@ -30,15 +30,17 @@ const getAllReviewToPR = async (req, res) => {
   const userId = req.user._id;
 
   try {
+    // console.log(prId);
     let { approvers } = await PullRequest.findById(prId).populate(
       "approvers.approverId",
       "username email"
     );
-    if(approvers===null || approvers===undefined){
+
+    if (approvers === null || approvers === undefined) {
       throw new Error("Invalid PR Id");
     }
     approvers = approvers.filter((ap) => {
-      return JSON.stringify(ap.approverId._id)!==JSON.stringify(userId);
+      return JSON.stringify(ap.approverId._id) !== JSON.stringify(userId);
     });
     return res.status(200).json({ success: true, userId, approvers });
   } catch (e) {

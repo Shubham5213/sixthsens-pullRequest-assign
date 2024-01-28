@@ -41,7 +41,7 @@ const ApprovalPR = ({ approvalPR }) => {
     <Box m={4}>
       <AddReviewModal
         open={open}
-        approvalId={approvalId}
+        prId={prId}
         handleClose={handleClose}
       />
       <GetReviewsModal
