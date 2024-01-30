@@ -11,8 +11,8 @@ const MyPRsPage = () => {
   const getMyPrs = async () => {
     setLoading(true);
     const data = await PRService.getUserPR();
-    if (data.success) {
-      // console.log(data.userPR);
+    if (data && data.success) {
+      // console.log(data);
       setMyPR(data.userPR);
       setLoading(false);
     }

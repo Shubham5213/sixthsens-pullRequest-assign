@@ -46,7 +46,7 @@ const createPR = async (req, res) => {
 
     return res
       .status(200)
-      .json({ success: true, pullRequest: PR, approversArray });  
+      .json({ success: true, pullRequest: PR, approversArray });
   } catch (err) {
     return res.status(400).json({ success: false, msg: err.message });
   }
@@ -121,7 +121,7 @@ const getUserCreatedPR = async (req, res) => {
       return res.status(200).json({ success: true, userPR });
     } else throw new Error("Error While Fetching!!");
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(400).json({
       success: false,
       msg: err.message,

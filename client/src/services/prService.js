@@ -52,8 +52,8 @@ class PRService {
       console.log(error);
     }
   }
-  static async addReviewToPR(approvelId, review) {
-    let url = `${apiUrl}/user/pull-requests/${approvelId}/reviews`;
+  static async addReviewToPR(prId, review) {
+    let url = `${apiUrl}/user/pull-requests/${prId}/reviews`;
     const body = {
       reviews: review,
     };
@@ -71,12 +71,12 @@ class PRService {
     }
   }
 
-  static async createPR(title, description, approvers) {
+  static async createPR(title, description, approversArr) {
     let url = `${apiUrl}/pull-requests`;
     const body = {
       title,
       description,
-      approvers,
+      approversArr,
     };
     try {
       const response = await axios.post(url, body, {
@@ -88,10 +88,11 @@ class PRService {
       let data = response.data;
       return data;
     } catch (error) {
-      // console.log(error);
+      console.log(error);
       return;
     }
   }
+
   static async getPRReviews(pullRequestId) {
     let url = `${apiUrl}/user/pull-requests/${pullRequestId}/reviews`;
 

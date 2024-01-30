@@ -1,9 +1,18 @@
-import React from "react";
-import { Box, VStack, Text } from "@chakra-ui/react";
+import React,{useState} from "react";
+import { Box, VStack, Text, Button } from "@chakra-ui/react";
+import PRService from "../services/prService";
 
 const UserPR = ({ PR }) => {
+  const [reviews, setReviews]=useState([]);
+  const handleReviews=async ()=>{
+    const data = await PRService.getPRReviews(PR._id);
+    if (data && data.success) {
+      // console.log(data);  
+      setReviews(data.reviews);
+    }
+  };
   return (
-    <Box p={2} m={2}>
+    <Box p={2} m={2} w={"full"}>
       <VStack
         bgColor="#0F2167"
         color="white"
@@ -12,30 +21,39 @@ const UserPR = ({ PR }) => {
         alignContent={"stretch"}
         h="100%"
       >
-        <Box>Title: {PR.title}</Box>
+        <Text>Title: {PR.title}</Text>
         <Text>Description: {PR.description}</Text>
-        <Text>Approvers Details</Text>
-        {PR.approvers.map((approver) => {
-          return (
-            <Box
-              key={approver._id}
-              bgColor="#5F0F40"
-              color="white"
-              p={4}
-              rounded={6}
-            >
-              <Box>Username: {approver.approverId.username}</Box>
-              <Box>Email: {approver.approverId.email}</Box>
-              <Box>Status: {approver.status}</Box>
-              <Box>
-                Reviews:{" "}
-                {approver.reviews !== undefined
-                  ? approver.reviews
-                  : "No Reviews Yet"}
+        <Text>
+          Current Status:{" "}
+          {PR.currentLevel === -1
+            ? "Approved"
+            : `pending at Level ${PR.currentLevel}`}
+        </Text>
+        <Button colorScheme="blue" onClick={handleReviews}>
+          Get all Reviews
+        </Button>
+        <VStack>
+          {reviews?.map((review) => {
+            return (
+              <Box
+                key={review._id}
+                bgColor="#092635"
+                color="white"
+                p={4}
+                rounded={4}
+              >
+                <Box>Username: {review.userId.username}</Box>
+                <Box>Email: {review.userId.email}</Box>
+                <Box>
+                  Reviews:{" "}
+                  {review.reviews !== undefined
+                    ? review.reviews
+                    : "No Reviews Yet"}
+                </Box>
               </Box>
-            </Box>
-          );
-        })}
+            );
+          })}
+        </VStack>
       </VStack>
     </Box>
   );

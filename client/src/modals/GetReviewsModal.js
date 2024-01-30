@@ -16,9 +16,9 @@ const GetReviewsModal = ({ open, handleClose, pullRequestId }) => {
   // const toast = useToast();
   const getReviews = async () => {
     const data = await PRService.getPRReviews(pullRequestId);
-    if (data.success) {
+    if (data && data.success) {
       // console.log(data);  
-      setReviews(data.approvers);
+      setReviews(data.reviews);
       // toast({
       //   title: "Successfully fetched",
       //   status: "success",
@@ -52,9 +52,8 @@ const GetReviewsModal = ({ open, handleClose, pullRequestId }) => {
                     p={4}
                     rounded={4}
                   >
-                    <Box>Username: {review.approverId.username}</Box>
-                    <Box>Email: {review.approverId.email}</Box>
-                    <Box>Status: {review.status}</Box>
+                    <Box>Username: {review.userId.username}</Box>
+                    <Box>Email: {review.userId.email}</Box>
                     <Box>
                       Reviews:{" "}
                       {review.reviews !== undefined

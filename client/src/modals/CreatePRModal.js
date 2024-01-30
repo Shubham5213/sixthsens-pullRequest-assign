@@ -10,6 +10,7 @@ import {
   Input,
   useToast,
   Box,
+  Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,25 +22,37 @@ import UserService from "../services/userService";
 const CreatePRModal = ({ open, handleClose }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [selectedApprovers, setSelectedApprovers] = useState([]);
+  const [approverLevel, setApproverLevel] = useState();
+  const [selectedApprovers, setSelectedApprovers] = useState({});
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const toast = useToast();
   const navigate = useNavigate();
 
-  const handleApprovers = (approversToAdd) => {
-    if (selectedApprovers.includes(approversToAdd)) {
-      toast({
-        title: "User already added",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      return;
+  const handleApprovers = (approversToAdd, level) => {
+    for (const key in selectedApprovers) {
+      if (
+        Object.hasOwn(selectedApprovers, key) &&
+        selectedApprovers[key].includes(approversToAdd)
+      ) {
+        toast({
+          title: "User already added",
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
+        return;
+      }
     }
-
-    setSelectedApprovers([...selectedApprovers, approversToAdd]);
+    if (Object.hasOwn(selectedApprovers, level)) {
+      setSelectedApprovers({
+        ...selectedApprovers,
+        [level]: [...selectedApprovers[level], approversToAdd],
+      });
+    } else
+      setSelectedApprovers({ ...selectedApprovers, [level]: [approversToAdd] });
   };
 
   const handleSearch = async (query) => {
@@ -53,10 +66,19 @@ const CreatePRModal = ({ open, handleClose }) => {
     setLoading(false);
   };
 
-  const handleDelete = (delUser) => {
-    setSelectedApprovers(
-      selectedApprovers.filter((sel) => sel._id !== delUser._id)
+  const handleDelete = (delUser, level) => {
+    const updatedApprovers = selectedApprovers[level].filter(
+      (sel) => sel._id !== delUser._id
     );
+    // console.log(updatedApprovers.length);
+    if (!updatedApprovers.length)
+      setSelectedApprovers((selectedApprovers) => {
+        const { [level]: _, ...rest } = selectedApprovers;
+        // console.log(rest);
+        return rest;
+      });
+    else
+      setSelectedApprovers({ ...selectedApprovers, [level]: updatedApprovers });
   };
 
   const handleSubmit = async () => {
@@ -70,16 +92,22 @@ const CreatePRModal = ({ open, handleClose }) => {
       });
       return;
     }
+    const approversArr = [];
 
-    const approvers = [];
+    for (const level in selectedApprovers) {
+      let obj = {};
+      if (Object.hasOwn(selectedApprovers, level)) obj.level = level;
+      obj.approvers = selectedApprovers[level].map((s) => {
+        return { approverId: s._id };
+      });
+      approversArr.push(obj);
+    }
 
-    selectedApprovers.forEach((s) => {
-      approvers.push({ approverId: s._id });
-    });
+    // console.log(approversArr);
 
-    const data = await PRService.createPR(title, description, approvers);
+    const data = await PRService.createPR(title, description, approversArr);
 
-    if (data.success) {
+    if (data && data.success) {
       handleClose();
       toast({
         title: "PullRequest Created Successfully",
@@ -123,17 +151,31 @@ const CreatePRModal = ({ open, handleClose }) => {
               onChange={(e) => setDescription(e.target.value)}
             />
             <Input
+              placeholder="Set Approver Level"
+              type="number"
+              mb={3}
+              onChange={(e) => setApproverLevel(e.target.value)}
+            />
+            <Input
               placeholder="Add Approvers by Username/Email"
               mb={1}
               onChange={(e) => handleSearch(e.target.value)}
             />
             <Box w="100%" display="flex" flexWrap="wrap">
-              {selectedApprovers.map((u) => (
-                <UserBadgeItem
-                  key={u._id}
-                  user={u}
-                  handleFunction={() => handleDelete(u)}
-                />
+              {Object.keys(selectedApprovers).map((level) => (
+                <Box key={level} w="100%" display="flex" flexWrap="wrap">
+                  <Text bgColor={"cyan"} p={1} m={1} rounded={4}>
+                    {" "}
+                    {`Level ${level}`}{" "}
+                  </Text>
+                  {selectedApprovers[level].map((u) => (
+                    <UserBadgeItem
+                      key={u._id}
+                      user={u}
+                      handleFunction={() => handleDelete(u, level)}
+                    />
+                  ))}
+                </Box>
               ))}
             </Box>
             {loading ? (
@@ -145,7 +187,7 @@ const CreatePRModal = ({ open, handleClose }) => {
                   <UserListItem
                     key={user._id}
                     user={user}
-                    handleFunction={() => handleApprovers(user)}
+                    handleFunction={() => handleApprovers(user, approverLevel)}
                   />
                 ))
             )}

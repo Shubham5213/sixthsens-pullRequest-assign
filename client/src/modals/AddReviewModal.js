@@ -19,7 +19,7 @@ const AddReviewModal = ({ open, handleClose, prId }) => {
 
   const handleSubmit = async () => {
     const data = await PRService.addReviewToPR(prId, review);
-    if (data.success) {
+    if (data && data.success) {
       toast({
         title: "Review Added Successfully",
         status: "success",

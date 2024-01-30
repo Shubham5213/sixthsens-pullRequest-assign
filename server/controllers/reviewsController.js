@@ -41,42 +41,60 @@ const getAllReviewToPR = async (req, res) => {
   const userId = req.user._id;
 
   try {
-    // console.log(prId);
-    let approval = await Approval.findOne({
-      pullRequestId: prId,
-      approverId: userId,
-    });
-
-    let approvers = await ApproverArray.findOne(
-      { pullRequestId: prId },
-      { levels: { $elemMatch: { level: approval.level } } }
-    );
-
-    approvers = approvers.levels[0].approvers;
-
-    const resp = [];
-    for (const ap of approvers) {
-      if (JSON.stringify(ap.approverId) !== JSON.stringify(userId)) {
-        let data = await User.findById(ap.approverId);
-        let a = {
-          userId: ap.approverId,
-          username: data.username,
-          email: data.email,
-          reviews: ap.reviews,
-        };
-        resp.push(a);
-      }
-    }
-
-    if (approvers === null || approvers === undefined) {
-      throw new Error("Invalid PR Id");
-    }
-    
-    return res.status(200).json({ success: true, resp });
+    let reviews = await Review.find({ pullRequestId: prId }).populate("userId","username email");
+    return res.status(200).json({ success: true, reviews });
   } catch (e) {
-    console.log(e);
-    return res.status(400).json({ success: false });
+    // console.log(e);
+    return res.status(400).json({ success: false, error: e.message });
   }
 };
+
+// level wise get Reviews
+// const getAllReviewToPR = async (req, res) => {
+//   const prId = req.params.id;
+//   const userId = req.user._id;
+
+//   try {
+//     // console.log(prId);
+//     let approval = await Approval.findOne({
+//       pullRequestId: prId,
+//       approverId: userId,
+//     });
+
+//     if (approval === null || approval === undefined) {
+//       throw new Error("Invalid PR ID");
+//     }
+
+//     let approvers = await ApproverArray.findOne(
+//       { pullRequestId: prId },
+//       { levels: { $elemMatch: { level: approval.level } } }
+//     );
+
+//     approvers = approvers.levels[0].approvers;
+
+//     const resp = [];
+//     for (const ap of approvers) {
+//       if (JSON.stringify(ap.approverId) !== JSON.stringify(userId)) {
+//         let data = await User.findById(ap.approverId);
+//         let a = {
+//           userId: ap.approverId,
+//           username: data.username,
+//           email: data.email,
+//           reviews: ap.reviews,
+//         };
+//         resp.push(a);
+//       }
+//     }
+
+//     if (approvers === null || approvers === undefined) {
+//       throw new Error("Invalid PR Id");
+//     }
+
+//     return res.status(200).json({ success: true, resp });
+//   } catch (e) {
+//     console.log(e);
+//     return res.status(400).json({ success: false });
+//   }
+// };
 
 module.exports = { addReviewToPR, getAllReviewToPR };
