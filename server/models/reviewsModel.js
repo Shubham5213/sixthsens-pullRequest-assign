@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const reviewSchema = new mongoose.Schema(
   {
     pullRequestId: { type: mongoose.Schema.Types.ObjectId, ref: "PullRequest" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     reviews: { type: String },
   },
   {

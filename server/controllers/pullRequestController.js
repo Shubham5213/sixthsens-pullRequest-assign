@@ -2,12 +2,13 @@ const User = require("../models/userModel");
 const Role = require("../models/rolesModel");
 const PullRequest = require("../models/pullRequestsModel");
 const Approval = require("../models/approvalsModel");
+const ApproverArray = require("../models/approversArrayModel");
 
 // Create PR
 const createPR = async (req, res) => {
-  const { title, description, approvers } = req.body;
+  const { title, description, approversArr } = req.body;
   try {
-    if (!title || !approvers) {
+    if (!title || !approversArr) {
       throw new Error("Enter All the Fields");
     }
     const PRexists = await PullRequest.findOne({ title });
@@ -15,23 +16,37 @@ const createPR = async (req, res) => {
       throw new Error("Title Exists, Choose Another");
     }
 
+    // console.log(approversArr);
     let PR = {
       title: title,
       description: description,
       requesterId: req.user._id,
-      approvers: approvers,
     };
-
     PR = await PullRequest.create(PR);
-    approvers.forEach(async (approver) => {
-      await Approval.create({
-        pullRequestId: PR._id,
-        approverId: approver.approverId,
+
+    let approversArray = await ApproverArray.create({
+      pullRequestId: PR._id,
+      levels: approversArr,
+    });
+
+    PR = await PullRequest.findByIdAndUpdate(PR._id, {
+      approversArrayId: approversArray._id,
+    });
+
+    approversArr.forEach(async (ele) => {
+      let level = ele.level;
+      Object.values(ele.approvers).forEach(async (e) => {
+        await Approval.create({
+          pullRequestId: PR._id,
+          approverId: e.approverId,
+          level: level,
+        });
       });
     });
+
     return res
       .status(200)
-      .json({ success: true, pullRequest: PR });
+      .json({ success: true, pullRequest: PR, approversArray });  
   } catch (err) {
     return res.status(400).json({ success: false, msg: err.message });
   }
@@ -101,7 +116,7 @@ const deletePR = async (req, res) => {
 const getUserCreatedPR = async (req, res) => {
   const userId = req.user._id;
   try {
-    let userPR = await PullRequest.find({ requesterId: userId }).populate("approvers.approverId", "username email");
+    let userPR = await PullRequest.find({ requesterId: userId });
     if (userPR) {
       return res.status(200).json({ success: true, userPR });
     } else throw new Error("Error While Fetching!!");
