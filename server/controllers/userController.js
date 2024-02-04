@@ -68,7 +68,6 @@ const loginUser = async (req, res) => {
       user = await user.populate("roles");
       sendToken(user, 200, res);
     } else {
-      res.status(401);
       throw new Error("Invalid Email or Password");
     }
   } catch (err) {

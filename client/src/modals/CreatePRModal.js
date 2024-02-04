@@ -32,6 +32,7 @@ const CreatePRModal = ({ open, handleClose }) => {
 
   const handleApprovers = (approversToAdd, level) => {
     for (const key in selectedApprovers) {
+      // check a approvers already added to the level🧐
       if (
         Object.hasOwn(selectedApprovers, key) &&
         selectedApprovers[key].includes(approversToAdd)
@@ -46,13 +47,18 @@ const CreatePRModal = ({ open, handleClose }) => {
         return;
       }
     }
+    // add approver to the level if it exists
     if (Object.hasOwn(selectedApprovers, level)) {
       setSelectedApprovers({
         ...selectedApprovers,
         [level]: [...selectedApprovers[level], approversToAdd],
       });
-    } else
+    }
+    // add approver to the level, if level doesn't exist add one👍
+    else
       setSelectedApprovers({ ...selectedApprovers, [level]: [approversToAdd] });
+    // do this and see magic, important concept of component rendering😉
+    // console.log(selectedApprovers);
   };
 
   const handleSearch = async (query) => {

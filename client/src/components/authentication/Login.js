@@ -31,7 +31,8 @@ const Login = () => {
     }
 
     const data = await AuthService.postLogin(email, password);
-    if (data!==null && data.success) {
+
+    if (data && data.success) {
       const user = data.user;
       authContext.login();
       authContext.updateUser({
@@ -47,7 +48,7 @@ const Login = () => {
         position: "bottom",
       });
       navigate("/home");
-    } else {
+    } else if (data && !data.success) {
       toast({
         title: data.msg,
         status: "error",
